@@ -1,0 +1,36 @@
+[build]
+  command = "composer install --no-dev --optimize-autoloader && php build.php"
+  publish = "public"
+  environment = { PHP_VERSION = "8.1" }
+
+# Clean URLs: ?page=login → /login.html
+[[redirects]]
+  from = "/?page=landing"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/?page=login"
+  to = "/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/?page=signup"
+  to = "/signup.html"
+  status = 200
+
+[[redirects]]
+  from = "/?page=dashboard"
+  to = "/dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/?page=tickets"
+  to = "/tickets.html"
+  status = 200
+
+# Fallback for unknown pages
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

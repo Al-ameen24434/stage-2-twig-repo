@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Tickets - TicketFlow    </title>
+
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Global Styles (replaces Tailwind) -->
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        font-family: "Inter", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      body {
+        background: #f9fafb;
+        color: #111827;
+        line-height: 1.5;
+        min-height: 100vh;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      img,
+      svg {
+        display: block;
+      }
+
+      /* Layout */
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      @media (min-width: 640px) {
+        .container {
+          padding: 0 1.5rem;
+        }
+      }
+      @media (min-width: 1024px) {
+        .container {
+          padding: 0 2rem;
+        }
+      }
+
+      .flex {
+        display: flex;
+      }
+      .flex-col {
+        flex-direction: column;
+      }
+      .items-center {
+        align-items: center;
+      }
+      .justify-between {
+        justify-content: space-between;
+      }
+      .gap-2 {
+        gap: 0.5rem;
+      }
+      .gap-4 {
+        gap: 1rem;
+      }
+      .gap-6 {
+        gap: 1.5rem;
+      }
+
+      /* Grid */
+      .grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+      .grid-cols-1 {
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 768px) {
+        .md-grid-cols-3 {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      /* Typography */
+      .text-xs {
+        font-size: 0.75rem;
+        line-height: 1rem;
+      }
+      .text-sm {
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+      }
+      .text-base {
+        font-size: 1rem;
+        line-height: 1.5rem;
+      }
+      .text-lg {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+      }
+      .text-xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+      }
+      .text-2xl {
+        font-size: 1.5rem;
+        line-height: 2rem;
+      }
+      .text-3xl {
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+      }
+      .text-4xl {
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+      }
+
+      .font-medium {
+        font-weight: 500;
+      }
+      .font-semibold {
+        font-weight: 600;
+      }
+      .font-bold {
+        font-weight: 700;
+      }
+
+      .text-gray-400 {
+        color: #9ca3af;
+      }
+      .text-gray-500 {
+        color: #6b7280;
+      }
+      .text-gray-600 {
+        color: #4b5563;
+      }
+      .text-gray-700 {
+        color: #374151;
+      }
+      .text-gray-900 {
+        color: #111827;
+      }
+      .text-green-600 {
+        color: #16a34a;
+      }
+      .text-blue-600 {
+        color: #2563eb;
+      }
+
+      /* Spacing */
+      .p-4 {
+        padding: 1rem;
+      }
+      .p-6 {
+        padding: 1.5rem;
+      }
+      .px-4 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .px-6 {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+      .py-24 {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+      }
+      .mb-2 {
+        margin-bottom: 0.5rem;
+      }
+      .mb-4 {
+        margin-bottom: 1rem;
+      }
+      .mb-8 {
+        margin-bottom: 2rem;
+      }
+      .mb-12 {
+        margin-bottom: 3rem;
+      }
+      .mt-1 {
+        margin-top: 0.25rem;
+      }
+
+      /* Navbar */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .navbar-inner {
+        height: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+      }
+      .logo svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        color: #2563eb;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .user-section {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding-left: 0.5rem;
+        border-left: 1px solid #e5e7eb;
+      }
+
+      /* Icons */
+      .icon-sm {
+        width: 1rem;
+        height: 1rem;
+      }
+      .icon-md {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      /* Responsive */
+      @media (min-width: 640px) {
+        .sm-flex-row {
+          flex-direction: row;
+        }
+      }
+    </style>
+
+    <!-- Your custom styles -->
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+
+    <style>
+  :root {
+    --primary: #2563eb;
+    --primary-fg: #ffffff;
+    --destructive: #dc2626;
+    --card: #ffffff;
+    --card-fg: #111827;
+    --border: #e5e7eb;
+    --input: #ffffff;
+    --ring: #2563eb;
+    --muted: #6b7280;
+    --bg: #f9fafb;
+    --success: #16a34a;
+    --warning: #f59e0b;
+  }
+
+  .container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  @media (min-width: 640px) {
+    .container {
+      padding: 0 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container {
+      padding: 0 2rem;
+    }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+  .card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: translateY(-4px);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: var(--primary-fg);
+    border: 1px solid var(--primary);
+  }
+  .btn-primary:hover {
+    background: #1d4ed8;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+    transform: translateY(-2px);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover {
+    background: #f3f4f6;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    padding: 0.5rem;
+    box-shadow: none;
+  }
+  .btn-ghost:hover {
+    background: #f3f4f6;
+  }
+
+  .btn-destructive {
+    background: var(--destructive);
+    color: #fff;
+    border: 1px solid var(--destructive);
+  }
+  .btn-destructive:hover {
+    background: #b91c1c;
+    box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .input,
+  .textarea,
+  select {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    background: var(--input);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    transition: border-color 0.2s ease;
+  }
+  .input:focus,
+  .textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+  .input.error,
+  .textarea.error {
+    border-color: var(--destructive);
+  }
+
+  .label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--card-fg);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    text-transform: capitalize;
+  }
+  .badge-open {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success);
+  }
+  .badge-in_progress {
+    background: rgba(251, 146, 60, 0.1);
+    color: var(--warning);
+  }
+  .badge-closed {
+    background: rgba(156, 163, 175, 0.1);
+    color: #6b7280;
+  }
+
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    display: none;
+  }
+  .modal.open {
+    display: flex;
+  }
+  .modal-content {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    width: 90%;
+    max-width: 32rem;
+    margin: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  .icon-sm {
+    width: 1rem;
+    height: 1rem;
+  }
+</style>
+  </head>
+  <body>
+    <div
+  id="app"
+  style="
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+  "
+>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="?page=landing" class="logo">
+        <svg
+          class="icon-md"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
+          />
+        </svg>
+        <span>TicketFlow</span>
+      </a>
+      <div class="nav-links">
+        <a href="?page=dashboard" class="btn btn-ghost">Dashboard</a>
+        <a href="?page=tickets" class="btn btn-ghost">Tickets</a>
+        <div class="user-section">
+          <span
+            id="userName"
+            class="text-sm text-gray-600"
+            data-testid="text-user-name"
+          ></span>
+          <button
+            onclick="handleLogout()"
+            class="btn btn-ghost"
+            data-testid="button-logout"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div style="flex: 1; padding: 6rem 1rem">
+    <div class="container">
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 2rem;
+          flex-direction: column;
+          gap: 1rem;
+        "
+      >
+        <div>
+          <h1
+            style="font-size: 1.875rem; font-weight: 600; margin-bottom: 0.5rem"
+            data-testid="text-tickets-title"
+          >
+            Tickets
+          </h1>
+          <p style="color: var(--muted)" data-testid="text-tickets-description">
+            Manage and track all your support tickets
+          </p>
+        </div>
+        <button
+          onclick="openCreateDialog()"
+          class="btn btn-primary"
+          data-testid="button-create-ticket"
+        >
+          <svg
+            class="icon-sm"
+            style="margin-right: 0.5rem"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          New Ticket
+        </button>
+      </div>
+
+      <div
+        id="ticketsList"
+        style="display: flex; flex-direction: column; gap: 1rem"
+      ></div>
+
+      <div
+        id="emptyState"
+        class="card"
+        data-testid="card-empty-state"
+        style="
+          --tw-text-opacity: 1;
+          color: hsl(var(--muted-foreground) / var(--tw-text-opacity, 1));
+          text-align: center;
+          padding: 2rem;
+          display: none;
+        "
+      >
+        <p>No tickets found</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create/Edit Modal -->
+  <div id="formModal" class="modal">
+    <div class="modal-content">
+      <div style="padding: 1.5rem 1.5rem 1rem">
+        <h2 id="modalTitle" style="font-size: 1.25rem; font-weight: 600">
+          Create New Ticket
+        </h2>
+        <p style="color: var(--muted); font-size: 0.875rem; margin-top: 0.5rem">
+          Fill in the details below.
+        </p>
+      </div>
+      <div style="padding: 0 1.5rem">
+        <div style="margin-bottom: 1rem">
+          <label class="label" for="modal-title">Title</label>
+          <input
+            id="modal-title"
+            class="input"
+            placeholder="Brief description"
+            data-testid="input-create-title"
+          />
+          <p
+            id="error-title"
+            style="
+              color: var(--destructive);
+              font-size: 0.875rem;
+              margin-top: 0.25rem;
+              display: none;
+            "
+            data-testid="error-create-title"
+          ></p>
+        </div>
+        <div style="margin-bottom: 1rem">
+          <label class="label" for="modal-description">Description</label>
+          <textarea
+            id="modal-description"
+            class="textarea"
+            rows="4"
+            placeholder="Detailed description"
+            data-testid="input-create-description"
+          ></textarea>
+          <p
+            id="error-description"
+            style="
+              color: var(--destructive);
+              font-size: 0.875rem;
+              margin-top: 0.25rem;
+              display: none;
+            "
+            data-testid="error-create-description"
+          ></p>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+          <div>
+            <label class="label" for="modal-status">Status</label>
+            <select
+              id="modal-status"
+              class="input"
+              data-testid="select-create-status"
+            >
+              <option value="open">Open</option>
+              <option value="in_progress">In Progress</option>
+              <option value="closed">Closed</option>
+            </select>
+          </div>
+          <div>
+            <label class="label" for="modal-priority">Priority</label>
+            <select
+              id="modal-priority"
+              class="input"
+              data-testid="select-create-priority"
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div
+        style="
+          padding: 1rem 1.5rem;
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.5rem;
+        "
+      >
+        <button
+          onclick="closeModal()"
+          class="btn btn-secondary"
+          data-testid="button-cancel-create"
+        >
+          Cancel
+        </button>
+        <button
+          id="submitBtn"
+          onclick="handleSubmit()"
+          class="btn btn-primary"
+          data-testid="button-confirm-create"
+        >
+          Create Ticket
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <div style="padding: 1.5rem 1.5rem 1rem">
+        <h2 style="font-size: 1.25rem; font-weight: 600">Delete Ticket</h2>
+        <p style="color: var(--muted); font-size: 0.875rem; margin-top: 0.5rem">
+          This action cannot be undone.
+        </p>
+      </div>
+      <div
+        style="
+          padding: 1rem 1.5rem;
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.5rem;
+        "
+      >
+        <button
+          onclick="closeDeleteModal()"
+          class="btn btn-secondary"
+          data-testid="button-cancel-delete"
+        >
+          Cancel
+        </button>
+        <button
+          onclick="confirmDelete()"
+          class="btn btn-destructive"
+          data-testid="button-confirm-delete"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="border-top: 1px solid #e5e7eb; background: white">
+    <div class="container" style="padding: 3rem 1.5rem">
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem">
+        <div>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              margin-bottom: 1rem;
+            "
+          >
+            <svg
+              class="icon-md"
+              style="color: #2563eb"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
+              />
+            </svg>
+            <span style="font-size: 1.25rem; font-weight: 700">TicketFlow</span>
+          </div>
+          <p style="font-size: 0.875rem; color: #4b5563">
+            Professional ticket management system designed for teams of all
+            sizes.
+          </p>
+        </div>
+        <div>
+          <h3 style="font-weight: 600; margin-bottom: 1rem">Quick Links</h3>
+          <ul
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 0.5rem;
+              font-size: 0.875rem;
+              color: #4b5563;
+            "
+          >
+            <li><a href="?page=landing" style="color: inherit">Home</a></li>
+            <li><a href="?page=login" style="color: inherit">Login</a></li>
+            <li><a href="?page=signup" style="color: inherit">Sign Up</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-weight: 600; margin-bottom: 1rem">Contact</h3>
+          <ul
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 0.5rem;
+              font-size: 0.875rem;
+              color: #4b5563;
+            "
+          >
+            <li>support@alameenabdulrshmon@gmail.com</li>
+            <li>1-800-TICKETS</li>
+            <li>Oshodi-Lagos, Nigeria</li>
+          </ul>
+        </div>
+      </div>
+      <div
+        style="
+          margin-top: 2rem;
+          padding-top: 2rem;
+          border-top: 1px solid #e5e7eb;
+          text-align: center;
+          font-size: 0.875rem;
+          color: #4b5563;
+        "
+      >
+        <p>© 2025 TicketFlow. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // ==============================================================
+  //  AUTH & SESSION
+  // ==============================================================
+  const SESSION_KEY = "ticketapp_session";
+
+  function requireAuth() {
+    const session = localStorage.getItem(SESSION_KEY);
+    if (!session) {
+      window.location.href = "?page=login";
+      return false;
+    }
+    return true;
+  }
+
+  function getSession() {
+    return JSON.parse(localStorage.getItem(SESSION_KEY));
+  }
+
+  function clearSession() {
+    localStorage.removeItem(SESSION_KEY);
+  }
+
+  // ==============================================================
+  //  TICKETS (localStorage)
+  // ==============================================================
+  const TICKETS_KEY = "ticketapp_tickets";
+
+  function getTickets(userId) {
+    const data = localStorage.getItem(TICKETS_KEY);
+    if (!data) return [];
+    try {
+      const all = JSON.parse(data);
+      return userId ? all.filter((t) => t.userId === userId) : all;
+    } catch {
+      return [];
+    }
+  }
+
+  function saveTickets(tickets) {
+    localStorage.setItem(TICKETS_KEY, JSON.stringify(tickets));
+  }
+
+  function createTicket(title, description, status, priority, userId) {
+    const tickets = getTickets();
+    const ticket = {
+      id: crypto.randomUUID(),
+      title,
+      description,
+      status,
+      priority,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      userId,
+    };
+    tickets.push(ticket);
+    saveTickets(tickets);
+    return ticket;
+  }
+
+  function updateTicket(id, updates) {
+    const tickets = getTickets();
+    const idx = tickets.findIndex((t) => t.id === id);
+    if (idx === -1) throw new Error("Not found");
+    tickets[idx] = {
+      ...tickets[idx],
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+    saveTickets(tickets);
+    return tickets[idx];
+  }
+
+  function deleteTicket(id) {
+    const tickets = getTickets();
+    saveTickets(tickets.filter((t) => t.id !== id));
+  }
+
+  // ==============================================================
+  //  TOAST
+  // ==============================================================
+  function showToast(msg, type = "success") {
+    const el = document.createElement("div");
+    el.textContent = msg;
+    el.style.cssText = `
+      position:fixed; bottom:2rem; right:2rem; padding:1rem 1.5rem;
+      background:${type === "success" ? "#16a34a" : "#dc2626"}; color:#fff;
+      border-radius:.5rem; box-shadow:0 4px 6px -1px rgba(0,0,0,.1);
+      z-index:1000; font-size:.875rem;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+  }
+
+  // ==============================================================
+  //  APP STATE
+  // ==============================================================
+  let currentUser = null;
+  let dialogMode = "create";
+  let selectedTicket = null;
+
+  // ==============================================================
+  //  INITIAL LOAD
+  // ==============================================================
+  if (!requireAuth()) {
+    // redirect handled
+  } else {
+    const session = getSession();
+    currentUser = session.user;
+    document.getElementById("userName").textContent = currentUser.name;
+    loadTickets();
+  }
+
+  // ==============================================================
+  //  TICKET LIST
+  // ==============================================================
+  function loadTickets() {
+    const tickets = getTickets(currentUser.id);
+    const list = document.getElementById("ticketsList");
+    const empty = document.getElementById("emptyState");
+
+    if (tickets.length === 0) {
+      list.innerHTML = "";
+      empty.style.display = "block";
+    } else {
+      empty.style.display = "none";
+      list.innerHTML = tickets
+        .map(
+          (t) => `
+        <div class="card" style="padding:1.5rem;" data-testid="card-ticket-${
+          t.id
+        }">
+          <div style="display:flex;gap:1rem;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;flex-direction:column;">
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.25rem;flex-wrap:wrap;">
+                <h3 style="font-size:1.125rem;font-weight:600;" data-testid="text-ticket-title-${
+                  t.id
+                }">${t.title}</h3>
+                <span class="badge badge-${t.status}">
+                  ${
+                    t.status === "open"
+                      ? "Open"
+                      : t.status === "in_progress"
+                      ? "In Progress"
+                      : "Closed"
+                  }
+                </span>
+              </div>
+              <p style="color:var(--muted);font-size:.875rem;" data-testid="text-ticket-description-${
+                t.id
+              }">${t.description}</p>
+            </div>
+            <div style="display:flex;gap:.5rem;">
+              <button onclick="openEditDialog('${
+                t.id
+              }')" class="btn btn-ghost" data-testid="button-edit-${t.id}">
+                <svg class="icon-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+              </button>
+              <button onclick="openDeleteDialog('${
+                t.id
+              }')" class="btn btn-ghost" style="color:var(--destructive);" data-testid="button-delete-${
+            t.id
+          }">
+                <svg class="icon-sm" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div style="display:flex;gap:1rem;font-size:.875rem;color:var(--muted);flex-wrap:wrap;">
+            <span data-testid="text-ticket-date-${t.id}">${formatDate(
+            t.createdAt
+          )}</span>
+            <span class="capitalize" data-testid="text-ticket-priority-${
+              t.id
+            }">Priority: ${t.priority}</span>
+          </div>
+        </div>
+      `
+        )
+        .join("");
+    }
+  }
+
+  // ==============================================================
+  //  MODAL HELPERS
+  // ==============================================================
+  function openCreateDialog() {
+    dialogMode = "create";
+    document.getElementById("modalTitle").textContent = "New Ticket";
+    document.getElementById("submitBtn").textContent = "New Ticket";
+    document.getElementById("modal-title").value = "";
+    document.getElementById("modal-description").value = "";
+    document.getElementById("modal-status").value = "open";
+    document.getElementById("modal-priority").value = "medium";
+    clearErrors();
+    document.getElementById("formModal").classList.add("open");
+  }
+
+  function openEditDialog(id) {
+    const ticket = getTickets(currentUser.id).find((t) => t.id === id);
+    selectedTicket = ticket;
+    dialogMode = "edit";
+    document.getElementById("modalTitle").textContent = "Edit Ticket";
+    document.getElementById("submitBtn").textContent = "Update Ticket";
+    document.getElementById("modal-title").value = ticket.title;
+    document.getElementById("modal-description").value = ticket.description;
+    document.getElementById("modal-status").value = ticket.status;
+    document.getElementById("modal-priority").value = ticket.priority;
+    clearErrors();
+    document.getElementById("formModal").classList.add("open");
+  }
+
+  function openDeleteDialog(id) {
+    selectedTicket = getTickets(currentUser.id).find((t) => t.id === id);
+    document.getElementById("deleteModal").classList.add("open");
+  }
+
+  function closeModal() {
+    document.getElementById("formModal").classList.remove("open");
+  }
+  function closeDeleteModal() {
+    document.getElementById("deleteModal").classList.remove("open");
+  }
+
+  function clearErrors() {
+    document.getElementById("error-title").style.display = "none";
+    document.getElementById("error-description").style.display = "none";
+  }
+
+  function validate() {
+    const title = document.getElementById("modal-title").value.trim();
+    const desc = document.getElementById("modal-description").value.trim();
+    let ok = true;
+
+    document.getElementById("error-title").style.display = title
+      ? "none"
+      : "block";
+    document.getElementById("error-description").style.display = desc
+      ? "none"
+      : "block";
+
+    if (!title) {
+      ok = false;
+      document.getElementById("error-title").textContent = "Title is required";
+    }
+    if (!desc) {
+      ok = false;
+      document.getElementById("error-description").textContent =
+        "Description is required";
+    }
+
+    return ok;
+  }
+
+  // ==============================================================
+  //  SUBMIT / DELETE
+  // ==============================================================
+  function handleSubmit() {
+    if (!validate()) return;
+
+    const data = {
+      title: document.getElementById("modal-title").value,
+      description: document.getElementById("modal-description").value,
+      status: document.getElementById("modal-status").value,
+      priority: document.getElementById("modal-priority").value,
+    };
+
+    try {
+      if (dialogMode === "create") {
+        createTicket(
+          data.title,
+          data.description,
+          data.status,
+          data.priority,
+          currentUser.id
+        );
+        showToast("Ticket created", "success");
+      } else {
+        updateTicket(selectedTicket.id, data);
+        showToast("Ticket updated", "success");
+      }
+      closeModal();
+      loadTickets();
+    } catch (e) {
+      showToast("Failed to save ticket", "error");
+    }
+  }
+
+  function confirmDelete() {
+    try {
+      deleteTicket(selectedTicket.id);
+      showToast("Ticket deleted", "success");
+      closeDeleteModal();
+      loadTickets();
+    } catch (e) {
+      showToast("Failed to delete", "error");
+    }
+  }
+
+  // ==============================================================
+  //  LOGOUT
+  // ==============================================================
+  function handleLogout() {
+    clearSession();
+    showToast("You have been logged out", "success");
+    window.location.href = "?page=landing";
+  }
+
+  // ==============================================================
+  //  DATE FORMAT
+  // ==============================================================
+  function formatDate(date) {
+    const d = new Date(date);
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+  }
+</script>
+
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/tickets.js"></script>
+    <script src="/assets/js/main.js"></script>
+
+      </body>
+</html>

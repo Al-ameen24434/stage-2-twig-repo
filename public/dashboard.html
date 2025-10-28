@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Dashboard - TicketFlow    </title>
+
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Global Styles (replaces Tailwind) -->
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        font-family: "Inter", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      body {
+        background: #f9fafb;
+        color: #111827;
+        line-height: 1.5;
+        min-height: 100vh;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      img,
+      svg {
+        display: block;
+      }
+
+      /* Layout */
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      @media (min-width: 640px) {
+        .container {
+          padding: 0 1.5rem;
+        }
+      }
+      @media (min-width: 1024px) {
+        .container {
+          padding: 0 2rem;
+        }
+      }
+
+      .flex {
+        display: flex;
+      }
+      .flex-col {
+        flex-direction: column;
+      }
+      .items-center {
+        align-items: center;
+      }
+      .justify-between {
+        justify-content: space-between;
+      }
+      .gap-2 {
+        gap: 0.5rem;
+      }
+      .gap-4 {
+        gap: 1rem;
+      }
+      .gap-6 {
+        gap: 1.5rem;
+      }
+
+      /* Grid */
+      .grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+      .grid-cols-1 {
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 768px) {
+        .md-grid-cols-3 {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      /* Typography */
+      .text-xs {
+        font-size: 0.75rem;
+        line-height: 1rem;
+      }
+      .text-sm {
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+      }
+      .text-base {
+        font-size: 1rem;
+        line-height: 1.5rem;
+      }
+      .text-lg {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+      }
+      .text-xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+      }
+      .text-2xl {
+        font-size: 1.5rem;
+        line-height: 2rem;
+      }
+      .text-3xl {
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+      }
+      .text-4xl {
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+      }
+
+      .font-medium {
+        font-weight: 500;
+      }
+      .font-semibold {
+        font-weight: 600;
+      }
+      .font-bold {
+        font-weight: 700;
+      }
+
+      .text-gray-400 {
+        color: #9ca3af;
+      }
+      .text-gray-500 {
+        color: #6b7280;
+      }
+      .text-gray-600 {
+        color: #4b5563;
+      }
+      .text-gray-700 {
+        color: #374151;
+      }
+      .text-gray-900 {
+        color: #111827;
+      }
+      .text-green-600 {
+        color: #16a34a;
+      }
+      .text-blue-600 {
+        color: #2563eb;
+      }
+
+      /* Spacing */
+      .p-4 {
+        padding: 1rem;
+      }
+      .p-6 {
+        padding: 1.5rem;
+      }
+      .px-4 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .px-6 {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+      .py-24 {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+      }
+      .mb-2 {
+        margin-bottom: 0.5rem;
+      }
+      .mb-4 {
+        margin-bottom: 1rem;
+      }
+      .mb-8 {
+        margin-bottom: 2rem;
+      }
+      .mb-12 {
+        margin-bottom: 3rem;
+      }
+      .mt-1 {
+        margin-top: 0.25rem;
+      }
+
+      /* Navbar */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .navbar-inner {
+        height: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+      }
+      .logo svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        color: #2563eb;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .user-section {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding-left: 0.5rem;
+        border-left: 1px solid #e5e7eb;
+      }
+
+      /* Icons */
+      .icon-sm {
+        width: 1rem;
+        height: 1rem;
+      }
+      .icon-md {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      /* Responsive */
+      @media (min-width: 640px) {
+        .sm-flex-row {
+          flex-direction: row;
+        }
+      }
+    </style>
+
+    <!-- Your custom styles -->
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+
+      </head>
+  <body>
+    <style>
+  :root {
+    --primary: #2563eb;
+    --primary-foreground: #ffffff;
+    --card: #ffffff;
+    --card-foreground: #111827;
+    --border: #e5e7eb;
+    --muted-foreground: #6b7280;
+    --background: #f9fafb;
+  }
+
+  .grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+  .card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: translateY(-4px);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    border: 1px solid var(--primary);
+  }
+  .btn-primary:hover {
+    background: #1d4ed8;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+    transform: translateY(-2px);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover {
+    background: #f3f4f6;
+    border-color: var(--primary);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .icon-sm {
+    width: 1rem;
+    height: 1rem;
+  }
+  .icon-md {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+</style>
+
+<div
+  id="app"
+  style="
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--background);
+  "
+>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="?page=landing" class="logo">
+        <svg
+          class="icon-md"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
+          />
+        </svg>
+        <span>TicketFlow</span>
+      </a>
+      <div class="nav-links">
+        <a href="?page=dashboard" class="btn btn-ghost">Dashboard</a>
+        <a href="?page=tickets" class="btn btn-ghost">Tickets</a>
+        <div class="user-section">
+          <span
+            id="userName"
+            class="text-sm text-gray-600"
+            data-testid="text-user-name"
+          ></span>
+          <button
+            onclick="handleLogout()"
+            class="btn btn-ghost"
+            data-testid="button-logout"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div style="flex: 1; padding: 6rem 1rem">
+    <div class="container">
+      <div style="margin-bottom: 2rem">
+        <h1
+          style="font-size: 1.875rem; font-weight: 600; margin-bottom: 0.5rem"
+          data-testid="text-dashboard-title"
+        >
+          Dashboard
+        </h1>
+        <p
+          style="color: var(--muted-foreground)"
+          data-testid="text-dashboard-description"
+        >
+          Welcome back! Here's an overview of your tickets.
+        </p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid" style="margin-bottom: 3rem">
+        <!-- Total Tickets -->
+        <div class="card" data-testid="card-stat-total">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 0.5rem;
+            "
+          >
+            <h3
+              style="
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: var(--muted-foreground);
+              "
+            >
+              Total Tickets
+            </h3>
+            <svg
+              class="icon-sm"
+              style="color: #9ca3af"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
+              />
+            </svg>
+          </div>
+          <div
+            id="totalCount"
+            style="font-size: 2.25rem; font-weight: 700"
+            data-testid="text-stat-total"
+          >
+            0
+          </div>
+          <p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem">
+            All tickets in the system
+          </p>
+        </div>
+
+        <!-- Open Tickets -->
+        <div class="card" data-testid="card-stat-open">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 0.5rem;
+            "
+          >
+            <h3
+              style="
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: var(--muted-foreground);
+              "
+            >
+              Open Tickets
+            </h3>
+            <svg
+              class="icon-sm"
+              style="color: #16a34a"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <div
+            id="openCount"
+            style="font-size: 2.25rem; font-weight: 700; color: #16a34a"
+            data-testid="text-stat-open"
+          >
+            0
+          </div>
+          <p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem">
+            Awaiting response
+          </p>
+        </div>
+
+        <!-- Closed Tickets -->
+        <div class="card" data-testid="card-stat-closed">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 0.5rem;
+            "
+          >
+            <h3
+              style="
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: var(--muted-foreground);
+              "
+            >
+              Resolved Tickets
+            </h3>
+            <svg
+              class="icon-sm"
+              style="color: #6b7280"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <div
+            id="closedCount"
+            style="font-size: 2.25rem; font-weight: 700; color: #6b7280"
+            data-testid="text-stat-closed"
+          >
+            0
+          </div>
+          <p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem">
+            Successfully resolved
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem">
+          Quick Actions
+        </h2>
+        <div style="display: flex; flex-direction: row; gap: 1rem">
+          <a
+            href="?page=tickets"
+            class="btn btn-primary"
+            data-testid="link-view-tickets"
+            >View All Tickets</a
+          >
+          <a
+            href="?page=tickets"
+            class="btn btn-secondary"
+            data-testid="link-create-ticket"
+            >Create New Ticket</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer style="border-top: 1px solid #e5e7eb; background: white">
+  <div class="container" style="padding: 3rem 1.5rem">
+    <div class="grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 2rem">
+      <!-- Brand -->
+      <div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+          "
+        >
+          <svg
+            class="icon-md"
+            style="color: #2563eb"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
+            />
+          </svg>
+          <span style="font-size: 1.25rem; font-weight: 700">TicketFlow</span>
+        </div>
+        <p style="font-size: 0.875rem; color: #4b5563">
+          Professional ticket management system designed for teams of all sizes.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h3 style="font-weight: 600; margin-bottom: 1rem">Quick Links</h3>
+        <ul
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #4b5563;
+            text-decoration: none;
+          "
+        >
+          <li><a href="?page=landing" style="color: inherit">Home</a></li>
+          <li><a href="?page=login" style="color: inherit">Login</a></li>
+          <li><a href="?page=signup" style="color: inherit">Sign Up</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h3 style="font-weight: 600; margin-bottom: 1rem">Contact</h3>
+        <ul
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #4b5563;
+          "
+        >
+          <li>support@ticketflow.app</li>
+          <li>1-800-TICKETS</li>
+          <li>San Francisco, CA</li>
+        </ul>
+      </div>
+    </div>
+
+    <div
+      style="
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e5e7eb;
+        text-align: center;
+        font-size: 0.875rem;
+        color: #4b5563;
+      "
+    >
+      <p>© 2025 TicketFlow. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  if (!requireAuth()) {
+    // Redirected to login
+  } else {
+    const session = getSession();
+    document.getElementById("userName").textContent = session.user.name;
+
+    const tickets = getTickets(session.user.id);
+    document.getElementById("totalCount").textContent = tickets.length;
+    document.getElementById("openCount").textContent = tickets.filter(
+      (t) => t.status === "open"
+    ).length;
+    document.getElementById("closedCount").textContent = tickets.filter(
+      (t) => t.status === "closed"
+    ).length;
+  }
+
+  function handleLogout() {
+    clearSession();
+    showToast("You have been logged out", "success");
+    window.location.href = "?page=landing";
+  }
+</script>
+
+    <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/tickets.js"></script>
+    <script src="/assets/js/main.js"></script>
+
+      </body>
+</html>
