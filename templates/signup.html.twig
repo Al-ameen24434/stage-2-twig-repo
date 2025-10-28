@@ -1,0 +1,254 @@
+{% extends "base.html.twig" %} {% block title %}Sign Up - {{ app_name }}{%
+endblock %} {% block content %}
+<div id="app" style="min-height: 100vh; display: flex; flex-direction: column">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="?page=landing" class="logo">
+        <svg
+          class="icon-md"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
+          />
+        </svg>
+        <span>TicketFlow</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Signup Form -->
+  <div
+    style="
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 1rem;
+    "
+  >
+    <div style="width: 100%; max-width: 28rem">
+      <div class="card" style="padding: 2rem">
+        <h2 class="text-2xl font-semibold mb-2" data-testid="text-signup-title">
+          Create an Account
+        </h2>
+        <p class="text-gray-600 mb-6" data-testid="text-signup-description">
+          Get started with TicketFlow today
+        </p>
+
+        <form
+          id="signupForm"
+          style="display: flex; flex-direction: column; gap: 1.5rem"
+        >
+          <div>
+            <label
+              for="name"
+              style="
+                display: block;
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: #374151;
+                margin-bottom: 0.5rem;
+              "
+            >
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              class="input"
+              placeholder="John Doe"
+              data-testid="input-name"
+            />
+            <p
+              id="nameError"
+              class="text-sm text-red-600 mt-1 hidden"
+              data-testid="error-name"
+            ></p>
+          </div>
+
+          <div>
+            <label
+              for="email"
+              style="
+                display: block;
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: #374151;
+                margin-bottom: 0.5rem;
+              "
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              class="input"
+              placeholder="you@example.com"
+              data-testid="input-email"
+            />
+            <p
+              id="emailError"
+              class="text-sm text-red-600 mt-1 hidden"
+              data-testid="error-email"
+            ></p>
+          </div>
+
+          <div>
+            <label
+              for="password"
+              style="
+                display: block;
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: #374151;
+                margin-bottom: 0.5rem;
+              "
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              class="input"
+              placeholder="••••••••"
+              data-testid="input-password"
+            />
+            <p
+              id="passwordError"
+              class="text-sm text-red-600 mt-1 hidden"
+              data-testid="error-password"
+            ></p>
+          </div>
+
+          <div>
+            <label
+              for="confirmPassword"
+              style="
+                display: block;
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: #374151;
+                margin-bottom: 0.5rem;
+              "
+            >
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              class="input"
+              placeholder="••••••••"
+              data-testid="input-confirm-password"
+            />
+            <p
+              id="confirmPasswordError"
+              class="text-sm text-red-600 mt-1 hidden"
+              data-testid="error-confirm-password"
+            ></p>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            style="width: 100%"
+            data-testid="button-submit"
+          >
+            Create Account
+          </button>
+
+          <div style="text-align: center; font-size: 0.875rem">
+            <span class="text-gray-600">Already have an account? </span>
+            <a
+              href="?page=login"
+              style="color: #2563eb; text-decoration: underline"
+              data-testid="link-login"
+            >
+              Login
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document
+    .getElementById("signupForm")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      const nameError = document.getElementById("nameError");
+      const emailError = document.getElementById("emailError");
+      const passwordError = document.getElementById("passwordError");
+      const confirmPasswordError = document.getElementById(
+        "confirmPasswordError"
+      );
+
+      [nameError, emailError, passwordError, confirmPasswordError].forEach(
+        (el) => el.classList.add("hidden")
+      );
+
+      let hasError = false;
+
+      if (!name) {
+        nameError.textContent = "Name is required";
+        nameError.classList.remove("hidden");
+        hasError = true;
+      }
+
+      if (!email) {
+        emailError.textContent = "Email is required";
+        emailError.classList.remove("hidden");
+        hasError = true;
+      } else if (!validateEmail(email)) {
+        emailError.textContent = "Please enter a valid email";
+        emailError.classList.remove("hidden");
+        hasError = true;
+      }
+
+      if (!password) {
+        passwordError.textContent = "Password is required";
+        passwordError.classList.remove("hidden");
+        hasError = true;
+      } else if (password.length < 6) {
+        passwordError.textContent = "Password must be at least 6 characters";
+        passwordError.classList.remove("hidden");
+        hasError = true;
+      }
+
+      if (!confirmPassword) {
+        confirmPasswordError.textContent = "Please confirm your password";
+        confirmPasswordError.classList.remove("hidden");
+        hasError = true;
+      } else if (password !== confirmPassword) {
+        confirmPasswordError.textContent = "Passwords do not match";
+        confirmPasswordError.classList.remove("hidden");
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      try {
+        registerUser(email, password, name);
+        const session = loginUser(email, password);
+        showToast("Account created! Welcome to TicketFlow.", "success");
+        window.location.href = "?page=dashboard";
+      } catch (error) {
+        showToast(error.message || "An error occurred", "error");
+      }
+    });
+</script>
+{% endblock %}
