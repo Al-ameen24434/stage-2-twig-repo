@@ -35,8 +35,8 @@
   to = "/tickets.html"
   status = 200
 
-# === Fallback for any unknown path ===
+# === Fallback: Catch all other routes ===
 [[redirects]]
   from = "/*"
   to = "/index.html"
-  status = 200 404
+  status = 200
